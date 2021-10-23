@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, Subscriber, BehaviorSubject, ObservableLike } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +9,13 @@ import { Component } from '@angular/core';
 }) 
 
 export class AppComponent {
+
+  httpHeader = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
+
+  constructor(private http: HttpClient) {}
+
   title = 'GICertificate';
   
   BuyerButton = true;
@@ -60,7 +69,7 @@ export class AppComponent {
   clickBuyerSignUp(){
     this.buyerSignUpButton = false;
     this.buyerSignInButton = false;
-    this.buyerSignUpForm = true;
+    this.buyerSignUpForm = true; 
   }
 
   clickBuyerSignIn(){
@@ -68,7 +77,19 @@ export class AppComponent {
     this.buyerSignInButton = false;
     this.buyerSignInForm = true;
   }
+
+  buyerSignUp(){
+    let Username = (document.getElementById("buyerSignupUsername") as HTMLInputElement).value;
+    let Password = (document.getElementById('buyerSignupPassword') as HTMLInputElement).value;
+    console.log("username: ",Username);
+
+    this.signBuyer(Username, Password).subscribe( (data) => {console.log('success!!!!')}, (error) => {console.log(error)});
+    
+  }
   
+  signBuyer(Username : String, Password : String) : Observable<any>{
+    return this.http.post<any>('http://localhost:5000/buyerSignup', JSON.stringify({"username": Username, "password": Password}), {'headers': { 'content-type': 'application/json'}  });
+  }
 
   ngOnInit(){}
 

@@ -67,12 +67,12 @@
         <div class="circle"></div>
         <div class="form-inner">
           <h1>SignUp - Buyer</h1>
-          <input type="text" placeholder="User Name">
-          <input type="text" placeholder="Password ">
+          <input type="text" id="buyerSignupUsername" placeholder="User Name">
+          <input type="text" id="buyerSignupPassword" placeholder="Password">
           <input type="checkbox" value="none" id="check_1" name="check" required/>
           <label for="check_1" class="check"><span>I agree to the terms and conditions.</span></label>
   
-          <button type="submit" href="/">Submit</button>
+          <button type="submit" (click)="buyerSignUp()">Submit</button>
         </div>
       </form>
 
