@@ -29,6 +29,8 @@ export class AppComponent {
 
   sellerAddProducts = false;
 
+  testdetails = "this is for testing";
+
   clickBuyerButton(){
     this.SellerButton = false;
     this.BuyerButton = false;
@@ -68,7 +70,7 @@ export class AppComponent {
     this.buyerSignInButton = false;
     this.buyerSignInForm = true;
   }
-  
+
 
   ngOnInit(){}
 
