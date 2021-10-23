@@ -16,7 +16,7 @@ const SellerSchema = new mongoose.Schema({
     ownerName: {
         type: String
     },
-    nationalOrganizationID: {
+    associationID: {
         type: String
     },
     officeAddress: {
@@ -24,6 +24,12 @@ const SellerSchema = new mongoose.Schema({
     },
     typeOfGoods: {
         type: String
+    },
+    productClass: {
+        type: String
+    },
+    mfdLocation: {
+        type: String,
     },
     companyEmail: {
         type: String

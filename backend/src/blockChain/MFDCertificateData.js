@@ -69,10 +69,10 @@ class blockChain{
     }
 
     insertData(payload){
+        console.log("started");
         let a = new Block(payload, this.previousHash);
         this.previousHash = a.hash;
         this.blockChain = this.previousHash;
-
     }
 
     getData(){
