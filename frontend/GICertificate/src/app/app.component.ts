@@ -86,13 +86,11 @@ export class AppComponent {
     this.signBuyer(Username, Password).subscribe( (data) => {console.log('success!!!!')}, (error) => {console.log(error)});
     
   }
-  
   signBuyer(Username : String, Password : String) : Observable<any>{
     return this.http.post<any>('http://localhost:5000/buyerSignup', JSON.stringify({"username": Username, "password": Password}), {'headers': { 'content-type': 'application/json'}  });
   }
 
   ngOnInit(){}
-
 }
 
 
