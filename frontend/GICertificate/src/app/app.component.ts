@@ -17,42 +17,15 @@ export class AppComponent {
   constructor(private http: HttpClient) {}
 
   title = 'GICertificate';
-  
-  BuyerButton = true;
-  SellerButton = true;
 
-  isSellerButtonClicked = false;
-  isBuyerButtonClicked = false;
+  sellerSignUpButton = true;
+  sellerSignInButton = true;
 
-  sellerSignUpButton = false;
-  sellerSignInButton = false;
-
-  buyerSignUpButton = false;
-  buyerSignInButton = false;
-
-  buyerSignUpForm = false;
   sellerSignUpForm = false;
 
-  buyerSignInForm = false;
   sellerSignInForm = false;
 
-  sellerAddProducts = false;
-
-  clickBuyerButton(){
-    this.SellerButton = false;
-    this.BuyerButton = false;
-    this.isBuyerButtonClicked = true;
-    this.buyerSignUpButton = true;
-    this.buyerSignInButton = true;
-  }
-
-  clickSellerButton(){
-    this.SellerButton = false;
-    this.BuyerButton = false;
-    this.isSellerButtonClicked = true;
-    this.sellerSignUpButton = true;
-    this.sellerSignInButton = true;
-  }
+  isSignInSubmitted = false;
 
   clickSellerSignUp(){
     this.sellerSignUpButton = false;
@@ -66,16 +39,9 @@ export class AppComponent {
     this.sellerSignInForm = true;
   }
 
-  clickBuyerSignUp(){
-    this.buyerSignUpButton = false;
-    this.buyerSignInButton = false;
-    this.buyerSignUpForm = true; 
-  }
-
-  clickBuyerSignIn(){
-    this.buyerSignUpButton = false;
-    this.buyerSignInButton = false;
-    this.buyerSignInForm = true;
+  clickSubmitSignIn(){
+    this.sellerSignInForm = false;
+    this.isSignInSubmitted = true;
   }
 
   buyerSignUp(){
@@ -84,7 +50,6 @@ export class AppComponent {
     console.log("username: ",Username);
 
     this.signBuyer(Username, Password).subscribe( (data) => {console.log('success!!!!')}, (error) => {console.log(error)});
-    
   }
   signBuyer(Username : String, Password : String) : Observable<any>{
     return this.http.post<any>('http://localhost:5000/buyerSignup', JSON.stringify({"username": Username, "password": Password}), {'headers': { 'content-type': 'application/json'}  });
