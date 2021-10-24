@@ -6,8 +6,8 @@ const blockChain = require('../src/blockChain/MFDCertificateData');
 const QRCode = require('./QRcode/qrgenerator');
 
 router.get('/', async(req, res) => { 
-    await Seller.deleteMany();
-    res.send('deleted'); 
+    const seller = await Seller.find();
+    res.json(seller); 
 })
 
 router.post('/sellerLogin', async(req, res) => {
@@ -19,7 +19,7 @@ router.post('/sellerLogin', async(req, res) => {
         res.status(404).json({"message": "invalid username/password"});
     }
     if(seller){
-        res.status(200).json({data: seller});
+        res.status(200).json({"message": seller});
     }
 });
 
@@ -93,7 +93,6 @@ router.post('/registerProduct', async(req, res) => {
         "typeOfGoods": req.body.typeOfGoods,
         "companyEmail": req.body.companyEmail,
         "productName": req.body.productName,
-        "productClass": req.body.productClass,    
         "mfdLocation": req.body.mfdLocation,
         "sellerName": req.body.sellerName,
         "sellerLocation": req.body.sellerLocation
@@ -114,6 +113,7 @@ router.post('/registerProduct', async(req, res) => {
         console.log(val);
         res.set('Content-Type', 'text/html');
         res.send(Buffer.from('<img src='+val+'>'));
+        // res.status(200).json({"data": val});
 
     }).catch(function(err){
         console.log(err);

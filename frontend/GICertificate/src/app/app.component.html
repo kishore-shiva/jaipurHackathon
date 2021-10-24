@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Contact us</title>
+    <title>Seller</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <style>
       
@@ -9,14 +9,11 @@
   </head>
   <body>
 
-    <button *ngIf="BuyerButton == true" type="submit" (click)="clickBuyerButton()">Buyer</button>
-    <button *ngIf="SellerButton == true" type="submit" (click)="clickSellerButton()">Seller</button>
-
-
-    <div *ngIf="isSellerButtonClicked == true">
+    <H1 style="color: black; margin-bottom: 15%; width: 50%;">Seller Portal</H1>
+    
       <button *ngIf="sellerSignUpButton == true" type="submit" (click)="clickSellerSignUp()">SignUp</button>
       <button *ngIf="sellerSignInButton == true" type="submit" (click)="clickSellerSignIn()">SignIn</button>
-    </div>
+
 
     <form action="/" class="decor"*ngIf="sellerSignUpForm == true" >
       <div class="form-left-decoration"></div>
@@ -24,19 +21,20 @@
       <div class="circle"></div>
       <div class="form-inner">
         <h1>SignUp - Seller</h1>
-        <input type="text" placeholder="Company Name">
-        <input type="text" placeholder="Proprietor Name">
-        <input type="email" placeholder="Company Email">
-        <input type="text" placeholder="Product Category Code">
-        <textarea placeholder="Company Address" rows="5"></textarea>
+        <input type="text" id="username" placeholder="Username">
+        <input type="text" id="password" placeholder="Password">
+        <input type="text" id="companyName" placeholder="Company Name">
+        <input type="text" id="companyId" placeholder="Company ID">
+        <input type="text" id="proprietorName" placeholder="Proprietor Name">
+        <input type="text" id="AssociationID" placeholder="Association ID">
+        <input type="email" id="companyEmail" placeholder="Company Email">
+        <input type="text" id="typeOfGoods" placeholder="typeOfGoods">
+        <input type="text" id="productClass" placeholder="Product class">
+        <input type="text" id="mfdLocation"  placeholder="mfd location">
 
-        <p>Click on the "Choose File" button to upload a Company Registration Certificate:</p>
-        <input type="file" id="myFile" name="filename">
+        <textarea id="companyAddress" placeholder="Company Address" rows="5"></textarea>
 
-        <input type="checkbox" value="none" id="check_1" name="check" required/>
-              <label for="check_1" class="check"><span>I agree to the terms and conditions.</span></label>
-
-        <button type="submit" href="/">Submit</button>
+        <button type="submit" (click)="sellerSignUp()" href="/">Submit</button>
       </div>
     </form>
 
@@ -46,50 +44,37 @@
       <div class="circle"></div>
       <div class="form-inner">
         <h1>SignIn - Seller</h1>
-        <input type="text" placeholder="User Name">
-        <input type="text" placeholder="Password ">
+        <input type="text" id="sellerSigninUsername" placeholder="User Name">
+        <input type="text" id="sellerSigninPassword" placeholder="Password ">
         <input type="checkbox" value="none" id="check_1" name="check" required/>
         <label for="check_1" class="check"><span>Forgot Password ?</span></label>
 
-        <button type="submit" href="/">Submit</button>
+        <button type="submit" href="#" (click)="clickSubmitSignIn()">Submit</button>
       </div>
     </form>
 
+    <div class="decor" *ngIf="isSignInSubmitted == true" >
+      <div class="form-left-decoration"></div>
+      <div class="form-right-decoration"></div>
+      <div class="circle"></div>
+      <div class="form-inner">
+        <h1>Add Product</h1>
+        <input type="text" id="scn" placeholder="Company Name" value='{{scn}}'>
+        <input type="text" id="sai" placeholder="Association ID" value="{{sai}}">
+        <input type="text" id="pt" placeholder="Product Type" value="{{pt}}">
+        <input type="email" id="ce" placeholder="Company Email" value="{{ce}}">
+        <input type="text" id="ml" placeholder="Manufacture Location" value="{{ml}}">
+        <textarea id="ca" placeholder="Company Address" rows="5" value="{{ca}}"></textarea>
+        <input type="text" id="pn" placeholder="Product Name">
+        <input type="text" id="sn" placeholder="Seller Name">
+        <input type="text" id="sl" placeholder="Seller Location">
+      
+        <button href="/" (click)="generateBarCode()">Submit</button>
+      </div>
+      </div>
 
-    <div *ngIf="isBuyerButtonClicked == true">
-      <button *ngIf="buyerSignUpButton == true" type="submit" (click)="clickBuyerSignUp()">SignUp</button>
-      <button *ngIf="buyerSignInButton == true" type="submit" (click)="clickBuyerSignIn()">SignIn</button>
-    </div>
-
-      <form action="/" class="decor" *ngIf="buyerSignUpForm == true">
-        <div class="form-left-decoration"></div>
-        <div class="form-right-decoration"></div>
-        <div class="circle"></div>
-        <div class="form-inner">
-          <h1>SignUp - Buyer</h1>
-          <input type="text" id="buyerSignupUsername" placeholder="User Name">
-          <input type="text" id="buyerSignupPassword" placeholder="Password">
-          <input type="checkbox" value="none" id="check_1" name="check" required/>
-          <label for="check_1" class="check"><span>I agree to the terms and conditions.</span></label>
-  
-          <button type="submit" (click)="buyerSignUp()">Submit</button>
-        </div>
-      </form>
-
-      <form action="/" class="decor" *ngIf="buyerSignInForm == true">
-        <div class="form-left-decoration"></div>
-        <div class="form-right-decoration"></div>
-        <div class="circle"></div>
-        <div class="form-inner">
-          <h1>SignIn - Buyer</h1>
-          <input type="text" placeholder="User Name">
-          <input type="text" placeholder="Password ">
-          <input type="checkbox" value="none" id="check_1" name="check" required/>
-          <label for="check_1" class="check"><span>Forgot Password ?</span></label>
-  
-          <button type="submit" href="/">Submit</button>
-        </div>
-      </form>
-
+      <Br>
+    <h3 style="color: black;" *ngIf="this.showBarCode == true">barcode url copied to clipboard!!!</h3>
+    
   </body>
 </html>

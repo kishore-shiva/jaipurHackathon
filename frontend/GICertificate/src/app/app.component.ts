@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subscriber, BehaviorSubject, ObservableLike } from 'rxjs';
+import { Observable, Subscriber, BehaviorSubject, ObservableLike, VirtualTimeScheduler } from 'rxjs';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-root',
@@ -14,45 +15,21 @@ export class AppComponent {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private clipboard: Clipboard) {}
+
+  scn=""; sai=""; pt=""; ce="" ; ml=""; ca=""; barcodePayload = {};
+  showBarCode = false; barcodeData = "";
 
   title = 'GICertificate';
-  
-  BuyerButton = true;
-  SellerButton = true;
 
-  isSellerButtonClicked = false;
-  isBuyerButtonClicked = false;
+  sellerSignUpButton = true;
+  sellerSignInButton = true;
 
-  sellerSignUpButton = false;
-  sellerSignInButton = false;
-
-  buyerSignUpButton = false;
-  buyerSignInButton = false;
-
-  buyerSignUpForm = false;
   sellerSignUpForm = false;
 
-  buyerSignInForm = false;
   sellerSignInForm = false;
 
-  sellerAddProducts = false;
-
-  clickBuyerButton(){
-    this.SellerButton = false;
-    this.BuyerButton = false;
-    this.isBuyerButtonClicked = true;
-    this.buyerSignUpButton = true;
-    this.buyerSignInButton = true;
-  }
-
-  clickSellerButton(){
-    this.SellerButton = false;
-    this.BuyerButton = false;
-    this.isSellerButtonClicked = true;
-    this.sellerSignUpButton = true;
-    this.sellerSignInButton = true;
-  }
+  isSignInSubmitted = false;
 
   clickSellerSignUp(){
     this.sellerSignUpButton = false;
@@ -66,16 +43,24 @@ export class AppComponent {
     this.sellerSignInForm = true;
   }
 
-  clickBuyerSignUp(){
-    this.buyerSignUpButton = false;
-    this.buyerSignInButton = false;
-    this.buyerSignUpForm = true; 
-  }
+  clickSubmitSignIn(){
+    this.sellerSignInForm = false;
+   //this.isSignInSubmitted = true;
+    let username = (document.getElementById("sellerSigninUsername") as HTMLInputElement).value;
+    let password = (document.getElementById("sellerSigninPassword") as HTMLInputElement).value;
+    this.http.post('http://localhost:5000/sellerLogin', {"username": username, "password": password}, {'headers': { 'content-type': 'application/json'}  }).subscribe((data) => {
+      const response = JSON.parse(JSON.stringify(data));
+      console.log(response.message);
 
-  clickBuyerSignIn(){
-    this.buyerSignUpButton = false;
-    this.buyerSignInButton = false;
-    this.buyerSignInForm = true;
+      this.scn = response.message.companyName;
+      this.sai = response.message.associationID;
+      this.pt = response.message.typeOfGoods;
+      this.ce = response.message.companyEmail;
+      this.ml = response.message.mfdLocation;
+      this.ca = response.message.officeAddress;
+      
+      this.isSignInSubmitted = true;
+    })
   }
 
   buyerSignUp(){
@@ -84,15 +69,61 @@ export class AppComponent {
     console.log("username: ",Username);
 
     this.signBuyer(Username, Password).subscribe( (data) => {console.log('success!!!!')}, (error) => {console.log(error)});
-    
   }
   
   signBuyer(Username : String, Password : String) : Observable<any>{
     return this.http.post<any>('http://localhost:5000/buyerSignup', JSON.stringify({"username": Username, "password": Password}), {'headers': { 'content-type': 'application/json'}  });
   }
 
+  sellerSignUp(){
+    let username = (document.getElementById("username") as HTMLInputElement).value;
+    let password = (document.getElementById("password") as HTMLInputElement).value;
+    let companyName = (document.getElementById("companyName") as HTMLInputElement).value;
+    let companyId = (document.getElementById("companyId") as HTMLInputElement).value;
+    let proprietorName = (document.getElementById("proprietorName") as HTMLInputElement).value;
+  }
+
+  generateBarCode(){
+    console.log('executing');
+      let scn = (document.getElementById("scn") as HTMLInputElement).value;
+      let sai = (document.getElementById("sai") as HTMLInputElement).value;
+      let pt = (document.getElementById("pt") as HTMLInputElement).value;
+      let ce = (document.getElementById("ce") as HTMLInputElement).value;
+      let ml = (document.getElementById("ml") as HTMLInputElement).value;
+      let ca = (document.getElementById("ca") as HTMLInputElement).value;
+      let pn = (document.getElementById("pn") as HTMLInputElement).value;
+      let sn = (document.getElementById("sn") as HTMLInputElement).value;
+      let sl = (document.getElementById("sl") as HTMLInputElement).value;
+
+      this.barcodePayload = {
+        "companyName": scn,
+        "associationID": sai,
+        "officeAddress": ca,
+        "typeOfGoods": pt,
+        "companyEmail": ce,
+        "productName": pn,    
+        "mfdLocation": ml,
+        "sellerName": sn,
+        "sellerLocation": sl
+      }
+
+      this.http.post('http://localhost:5000/registerProduct', {"companyName": scn,
+      "associationID": sai,
+      "officeAddress": ca,
+      "typeOfGoods": pt,
+      "companyEmail": ce,
+      "productName": pn,    
+      "mfdLocation": ml,
+      "sellerName": sn,
+      "sellerLocation": sl}, {'headers': { 'content-type': 'application/json'} }).subscribe((val) => {
+        this.barcodeData = JSON.parse(JSON.stringify(val)).data;
+        this.clipboard.copy(this.barcodeData);
+      });
+      this.showBarCode = true;
+      console.log("showing barcoed: ",this.showBarCode);
+  }
+
   ngOnInit(){}
 
 }
-
 
