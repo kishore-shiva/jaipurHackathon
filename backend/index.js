@@ -6,7 +6,7 @@ var cors = require('cors')
 const QRCode = require('./src/QRcode/qrgenerator');
 
 const app = express();
-const db = 'mongodb+srv://kishore:xW6caZdGwJDQ7Vr@cluster0.vlhn5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+const db = 'mongodb+srv://kishore:kishore@medanalysis.i0tbg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 
 app.use(cors())
 
@@ -22,7 +22,7 @@ app.use('/', routes);
 //intializing the blockChain
 const blockChain = new MFDBlockChain();
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => console.log(`[INFO] Server started on PORT ${PORT}`)); 
 

@@ -1,7 +1,9 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, Pipe, PipeTransform } from '@angular/core';
+import {Directive, HostBinding, Input} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subscriber, BehaviorSubject, ObservableLike, VirtualTimeScheduler } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { DomSanitizer, SafeResourceUrl, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -9,14 +11,19 @@ import { Clipboard } from '@angular/cdk/clipboard';
   styleUrls: ['./app.component.css']
 }) 
 
-export class AppComponent {
+// @Directive({
+//   selector: '[sanitizeHtml]'
+// })
+
+export class AppComponent{
 
   httpHeader = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
-  constructor(private http: HttpClient, private clipboard: Clipboard) {}
+  constructor(private http: HttpClient, private clipboard: Clipboard, private domSanitizer: DomSanitizer) {}
 
+  image: SafeResourceUrl = "";
   scn=""; sai=""; pt=""; ce="" ; ml=""; ca=""; barcodePayload = {};
   showBarCode = false; barcodeData = "";
 
@@ -118,7 +125,9 @@ export class AppComponent {
       "sellerLocation": sl}, {'headers': { 'content-type': 'application/json'} }).subscribe((val) => {
         this.barcodeData = JSON.parse(JSON.stringify(val)).data;
         this.clipboard.copy(this.barcodeData);
-      });
+        this.image = this.domSanitizer.bypassSecurityTrustResourceUrl(this.barcodeData);
+      }); 
+      
       this.showBarCode = true;
       console.log("showing barcoed: ",this.showBarCode);
   }
