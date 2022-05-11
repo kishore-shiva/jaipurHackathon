@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Seller = require('./models/seller');
 const Buyer = require('./models/buyer');
-const blockChain = require('../src/blockChain/MFDCertificateData');
+const blockChain = require('./blockChain/MFDCertificateData');
 const QRCode = require('./QRcode/qrgenerator');
+const app = express();
 
 let verifiedProducts = [];
 
@@ -171,5 +172,7 @@ router.get('/generateqrcode/:productID', (req, res) =>{
 //     console.err(err);
 // });
 })
+
+app.use(`/.netlify/functions/api`, router);
 
 module.exports = router;
